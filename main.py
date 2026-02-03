@@ -46,20 +46,18 @@ def screen_resume(resume_text, job_description):
 
     return response['message']['content']
 
-job_description = """
-We are looking for a Junior Data Scientist.
-Must have:
-- Python (Pandas, NumPy, Scikit-Learn)
-- Experience with SQL
-- Basic understanding of Machine Learning algorithms
-- Good communication skills
-Nice to have:
-- Experience with AWS or Cloud deployment
-- Knowledge of NLP
-"""
+print("Enter the job description (type 'END' on a new line to finish):")
+lines = []
+while True:
+    line = input()
+    if line.strip().upper() == "END":
+        break
+    lines.append(line)
+job_description = "\n".join(lines)
 
 try:
-    resume_text = extract_text_from_pdf("/Users/chikus/Documents/resume_shrutim_pdf.pdf")
+    resume_path = input("Enter the path to the candidate's resume PDF: ")
+    resume_text = extract_text_from_pdf(resume_path)
 except Exception as e:
     print(f"Error loading resume: {e}")
     exit()
