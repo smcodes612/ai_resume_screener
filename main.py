@@ -5,6 +5,7 @@ import fitz
 import ollama
 import json
 
+#use fitz to import the pymupdf library to extract the raw text from the document
 def extract_text_from_pdf(pdf_path):
     doc = fitz.open(pdf_path)
     text = ""
@@ -12,6 +13,8 @@ def extract_text_from_pdf(pdf_path):
         text += page.get_text()
     return text
 
+#using prompt engineering to rightly explain to ai its job
+#using the JSON format helps with saving all this data into a database later.
 def screen_resume(resume_text, job_description):
     prompt = f"""
     You are a Senior Technical Recruiter with 20 years of experience.
@@ -46,6 +49,7 @@ def screen_resume(resume_text, job_description):
 
     return response['message']['content']
 
+#asking the user to define the job description 
 print("Enter the job description (type 'END' on a new line to finish):")
 lines = []
 while True:
@@ -55,6 +59,7 @@ while True:
     lines.append(line)
 job_description = "\n".join(lines)
 
+#using the method from above to load the resume and extract text from it
 try:
     resume_path = input("Enter the path to the candidate's resume PDF: ")
     resume_text = extract_text_from_pdf(resume_path)
@@ -65,6 +70,7 @@ except Exception as e:
 print("AI is analyzing the candidate... (this may take a few seconds on local hardware)")
 result_json_string = screen_resume(resume_text, job_description)
 
+#parses and displays results here
 try:
     clean_json = result_json_string.replace("```json", "").replace("```", "").strip()
     result_data = json.loads(clean_json)
